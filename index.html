@@ -1101,29 +1101,75 @@ window.addEventListener('scroll', function() {
   else st.classList.remove('visible');
 });
 
-// ─── EMAILJS SETUP ────────────────────────────────────────────
-// STEP 1: Go to https://www.emailjs.com → Sign up free with your Gmail
-// STEP 2: Add a Gmail service → copy your SERVICE ID below
-// STEP 3: Create an email template → copy your TEMPLATE ID below
-// STEP 4: Go to Account → copy your PUBLIC KEY below
-// In your template, use these variables:
-//   {{from_name}}, {{company}}, {{email}}, {{phone}},
-//   {{area}}, {{product}}, {{message}}
+// ─── EMAIL SETUP ───────────────────────────────────────────────
+// Option A (recommended): configure EmailJS keys below.
+// Option B (automatic fallback): FormSubmit AJAX endpoint is used.
+const ENQUIRY_RECEIVER_EMAIL = "3msolutions75@gmail.com";
+const EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
 
-const EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY";   // ← paste here
-const EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";   // ← paste here
-const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";  // ← paste here
+function isEmailJsConfigured() {
+  return (
+    EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY" &&
+    EMAILJS_SERVICE_ID !== "YOUR_SERVICE_ID" &&
+    EMAILJS_TEMPLATE_ID !== "YOUR_TEMPLATE_ID"
+  );
+}
 
 (function() {
-  // Load EmailJS SDK
+  if (!isEmailJsConfigured()) return;
   var s = document.createElement('script');
   s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
   s.onload = function() { emailjs.init(EMAILJS_PUBLIC_KEY); };
   document.head.appendChild(s);
 })();
 
+function setFormStatus(ok, message) {
+  const successBox = document.getElementById('form-success');
+  const errorBox = document.getElementById('form-error');
+  if (ok) successBox.textContent = message;
+  else errorBox.textContent = message;
+  successBox.style.display = ok ? 'block' : 'none';
+  errorBox.style.display = ok ? 'none' : 'block';
+}
+
+function clearEnquiryForm() {
+  ['f-name','f-company','f-email','f-phone','f-msg'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f-area').value = '';
+  document.getElementById('f-product').value = '';
+}
+
+function sendViaEmailJs(params) {
+  return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+}
+
+function sendViaFormSubmit(params) {
+  return fetch('https://formsubmit.co/ajax/' + encodeURIComponent(ENQUIRY_RECEIVER_EMAIL), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      _subject: 'New Enquiry - 3M Solutions Website',
+      _captcha: 'false',
+      _template: 'table',
+      name: params.from_name,
+      company: params.company,
+      email: params.email,
+      phone: params.phone,
+      area: params.area,
+      product: params.product,
+      message: params.message
+    })
+  }).then(function(res) {
+    if (!res.ok) throw new Error('FormSubmit request failed');
+    return res.json();
+  });
+}
+
 // ─── FORM VALIDATION & SEND ───────────────────────────────────
-function sendEnquiry() {
+async function sendEnquiry() {
   const name    = document.getElementById('f-name').value.trim();
   const company = document.getElementById('f-company').value.trim();
   const email   = document.getElementById('f-email').value.trim();
@@ -1157,25 +1203,21 @@ function sendEnquiry() {
     area      : area,
     product   : product || 'Not specified',
     message   : msg,
-    to_email  : '3msolutions75@gmail.com'
+    to_email  : ENQUIRY_RECEIVER_EMAIL
   };
 
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-    .then(function() {
-      document.getElementById('form-success').style.display = 'block';
-      document.getElementById('form-error').style.display   = 'none';
-      // Clear form
-      ['f-name','f-company','f-email','f-phone','f-msg'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('f-area').value = '';
-      document.getElementById('f-product').value = '';
-      btnText.textContent = '✓ Sent!';
-    })
-    .catch(function() {
-      document.getElementById('form-error').style.display   = 'block';
-      document.getElementById('form-success').style.display = 'none';
-      btnText.textContent = 'Send Enquiry →';
-      btn.disabled = false;
-    });
+  try {
+    if (isEmailJsConfigured() && window.emailjs) await sendViaEmailJs(params);
+    else await sendViaFormSubmit(params);
+
+    setFormStatus(true, "✅ Your enquiry has been sent! Mahesh Joshi will contact you shortly.");
+    clearEnquiryForm();
+    btnText.textContent = '✓ Sent!';
+  } catch (error) {
+    setFormStatus(false, "❌ Could not send enquiry right now. Please call us directly at +91 98206 15529.");
+    btnText.textContent = 'Send Enquiry →';
+    btn.disabled = false;
+  }
 }
 </script>
 </body>
