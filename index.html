@@ -256,7 +256,16 @@ footer{background:var(--navy);padding:48px 5% 24px}
 
 /* WHATSAPP FLOAT */
 .wa-btn{position:fixed;bottom:80px;right:26px;background:#25d366;color:#fff;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 16px rgba(37,211,102,.4);transition:all .25s;z-index:99;text-decoration:none}
+.wa-btn::before{content:'';position:absolute;inset:-7px;border:2px solid rgba(37,211,102,.55);border-radius:50%;animation:waPulse 1.8s ease-out infinite}
+.wa-btn::after{content:'Chat with us on WhatsApp';position:absolute;right:56px;top:50%;transform:translateY(-50%);background:#1a2e44;color:#fff;font-size:11px;font-weight:600;padding:6px 10px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
 .wa-btn:hover{transform:translateY(-3px) scale(1.08);box-shadow:0 6px 20px rgba(37,211,102,.5)}
+.wa-btn:hover::after{opacity:1}
+
+@keyframes waPulse{
+  0%{transform:scale(.85);opacity:.9}
+  70%{transform:scale(1.25);opacity:0}
+  100%{transform:scale(1.25);opacity:0}
+}
 
 /* SECTION DIVIDERS */
 .wave-divider{width:100%;overflow:hidden;line-height:0;background:var(--light)}
@@ -1086,7 +1095,7 @@ footer{background:var(--navy);padding:48px 5% 24px}
 </footer>
 
 <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-<a class="wa-btn" href="https://wa.me/919820615529" target="_blank" title="Chat on WhatsApp">💬</a>
+<a class="wa-btn" href="https://wa.me/918928620253" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">💬</a>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
