@@ -209,6 +209,12 @@ section{padding:64px 5%}
 .office-box{background:var(--light);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
 .office-box .o-title{font-size:10px;font-weight:700;color:var(--red);letter-spacing:.5px;margin-bottom:5px}
 .office-box p{font-size:12px;color:#1a2e44;line-height:1.5}
+.map-wrap{margin-top:14px;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.map-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;background:var(--light);border-bottom:1px solid var(--border)}
+.map-title{font-size:10px;font-weight:700;color:var(--red);letter-spacing:.5px;text-transform:uppercase}
+.map-link{font-size:12px;font-weight:700;color:#1156a0}
+.map-link:hover{color:var(--navy)}
+.map-frame iframe{width:100%;height:220px;border:0;display:block}
 .gst-box{background:var(--light);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-top:14px}
 .gst-box .gst-title{font-size:10px;font-weight:700;color:#8aabbf;letter-spacing:.5px;margin-bottom:8px}
 .gst-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid #eef4fb}
@@ -321,6 +327,7 @@ footer{background:var(--navy);padding:48px 5% 24px}
   .contact-form{padding:20px}
   .footer-top{grid-template-columns:1fr;gap:22px}
   .footer-bottom{font-size:10px}
+  .map-frame iframe{height:200px}
 }
 
 @media (min-width: 568px) and (max-width: 900px){
@@ -395,6 +402,7 @@ footer{background:var(--navy);padding:48px 5% 24px}
   .compare-table th,.compare-table td{padding:9px 10px;font-size:11px}
   .footer-brand p,.footer-col li a,.footer-contact-item{font-size:11px}
   .footer-bottom{font-size:9px}
+  .map-frame iframe{height:190px}
 }
 </style>
 </head>
@@ -912,6 +920,21 @@ footer{background:var(--navy);padding:48px 5% 24px}
           <p>Gala No.1, Balaji Darshan, Near Abhinav High School, Sagarli, Dombivali (E) – 421203</p>
         </div>
       </div>
+
+      <div class="map-wrap">
+        <div class="map-head">
+          <div class="map-title">Our Location</div>
+          <a class="map-link" href="https://www.google.com/maps?q=A-302%20Ambika%20Dham%20CHS%20Near%20Ambika%20Tower%20Ayodhya%20Nagari%20Dombivali%20(E)&output=classic" target="_blank" rel="noopener noreferrer">Open in Maps →</a>
+        </div>
+        <div class="map-frame">
+          <iframe
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=A-302%20Ambika%20Dham%20CHS%20Near%20Ambika%20Tower%20Ayodhya%20Nagari%20Dombivali%20(E)&output=embed">
+          </iframe>
+        </div>
+      </div>
+
       <div class="gst-box">
         <div class="gst-title">BUSINESS REGISTRATION</div>
         <div class="gst-row"><span class="k">GSTIN</span><span class="v">27ACJPJ1451D1ZY</span></div>
